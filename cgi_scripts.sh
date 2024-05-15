@@ -102,6 +102,30 @@ mkupload () # create a job script for uploading data
   fi
 }
 
+mkdada2 () # create a job script for running dada2
+{
+  cp ~/subscripts/dada2_script.r . # copy the dada2 script to this location
+  cur_dir=`pwd`
+  slurm_script="dada2_job.sh"
+  echo "#! /bin/bash -l" > $slurm_script
+  echo "#SBATCH -A $hpc_project" >> $slurm_script
+  echo "#SBATCH -p node" >> $slurm_script
+  echo "#SBATCH -n 1" >> $slurm_script
+  echo "#SBATCH -C mem256GB " >> $slurm_script
+  echo "#SBATCH -t 2-00:00:00" >> $slurm_script
+  echo "#SBATCH -J dada2_fat" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# go to this directory:" >> $slurm_script
+  echo "cd $cur_dir" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# load software modules:" >> $slurm_script
+  echo "module load bioinfo-tools" >> $slurm_script
+  echo "module load R_packages" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# run dada2 script:" >> $slurm_script
+  echo "Rscript ./dada2_script.r" >> $slurm_script
+}
+
 mktar () # create a job script for tar-ing a folder
 {
   if test -d "$1"
