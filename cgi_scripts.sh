@@ -105,13 +105,14 @@ mkupload () # create a job script for uploading data
 mkdada2 () # create a job script for running dada2
 {
   cp ~/subscripts/dada2_script.r . # copy the dada2 script to this location
+  mkdir -p Filtered_data # create directory to put trimmed fastq data in, if it does not exist
   cur_dir=`pwd`
   slurm_script="dada2_job.sh"
   echo "#! /bin/bash -l" > $slurm_script
   echo "#SBATCH -A $hpc_project" >> $slurm_script
   echo "#SBATCH -p node" >> $slurm_script
   echo "#SBATCH -n 1" >> $slurm_script
-  echo "#SBATCH -C mem256GB " >> $slurm_script
+  echo "#SBATCH -C mem256GB " >> $slurm_script # this makes it a fat node
   echo "#SBATCH -t 2-00:00:00" >> $slurm_script
   echo "#SBATCH -J dada2_fat" >> $slurm_script
   echo "" >> $slurm_script
