@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Load user settings:
-. "./user_settings.sh"
+. "$HOME/CGIBashScripts/user_settings.sh"
 
 # Functions:
 
