@@ -75,6 +75,31 @@ mkblast () # create a job script for blastng a fasta file
   fi
 }
 
+mkdownload () # create a job script for running dada2
+{
+  # download aws download script:
+  wget -O awsdownload_script.sh https://raw.githubusercontent.com/Naturhistoriska/eDNA/main/Scripts/AWSdownload/awsdownload_script.sh?token=GHSAT0AAAAAACPFHLZLOSK5BCNFUAOD34IAZSFJWAQ
+  touch input.txt # create empty input file
+  cur_dir=`pwd`
+  slurm_script="download_job.sh"
+  echo "#! /bin/bash -l" > $slurm_script
+  echo "#SBATCH -A $hpc_project" >> $slurm_script
+  echo "#SBATCH -p core" >> $slurm_script
+  echo "#SBATCH -n 10" >> $slurm_script
+  echo "#SBATCH -t 10:00:00" >> $slurm_script
+  echo "#SBATCH -J aws_download" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# go to this directory:" >> $slurm_script
+  echo "cd $cur_dir" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# load software modules:" >> $slurm_script
+  echo "module load bioinfo-tools" >> $slurm_script
+  echo "module load awscli" >> $slurm_script
+  echo "" >> $slurm_script
+  echo "# start aws download (make sure to edit input.txt first):" >> $slurm_script
+  echo "bash ./awsdownload_script.sh" >> $slurm_script
+}
+
 mkupload () # create a job script for uploading data
 {
   if [ -d "$1" ]
