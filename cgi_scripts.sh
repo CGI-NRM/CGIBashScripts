@@ -129,7 +129,7 @@ mkupload () # create a job script for uploading data
 
 mkdada2 () # create a job script for running dada2
 {
-  cp ~/subscripts/dada2_script.r . # copy the dada2 script to this location
+  cp ~/CGIBashScripts/subscripts/dada2_script.r . # copy the dada2 script to this location
   mkdir -p Filtered_data # create directory to put trimmed fastq data in, if it does not exist
   cur_dir=`pwd`
   slurm_script="dada2_job.sh"
