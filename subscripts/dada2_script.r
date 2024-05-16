@@ -1,7 +1,7 @@
 library(dada2)
 library(edgeR)
 
-CollectData <- function(directory = "../Filtered_data") {
+CollectData <- function(directory = "./Filtered_data") {
   forward <- list.files(directory, pattern = "_1.fastq.gz", full.names = TRUE)
   reverse <- list.files(directory, pattern = "_2.fastq.gz", full.names = TRUE)
   forwardC <- list.files(directory, pattern = "_1.fastq.gz", full.names = FALSE)
@@ -20,7 +20,7 @@ CollectData <- function(directory = "../Filtered_data") {
 }
 
 # Collect sample paths and names. Duplicate line once per primer:
-primer1 <- MetaBAnalysis::CollectData("../Filtered_data")
+primer1 <- MetaBAnalysis::CollectData("./Filtered_data")
 
 # Filter reads and generate out object for later use:
 out <- dada2::filterAndTrim(primer1$Forward, primer1$FiltFs,
