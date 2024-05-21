@@ -20,7 +20,7 @@ CollectData <- function(directory = "./Filtered_data") {
 }
 
 # Collect sample paths and names. Duplicate line once per primer:
-primer1 <- MetaBAnalysis::CollectData("./Filtered_data")
+primer1 <- CollectData("./Filtered_data")
 
 # Filter reads and generate out object for later use:
 out <- dada2::filterAndTrim(primer1$Forward, primer1$FiltFs,
@@ -43,5 +43,5 @@ DadaAnalysis <- function(forward, reverse, muThread = TRUE, justConcatenate = FA
 }
 
 # Dereplicate and merge pairs with dada2:
-dada2Counts <- MetaBAnalysis::DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = TRUE, minOverlap = 5)
+dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = TRUE, minOverlap = 5)
 saveRDS(dada2Counts, file = "dada2Counts.rds")
