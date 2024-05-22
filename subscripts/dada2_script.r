@@ -43,5 +43,5 @@ DadaAnalysis <- function(forward, reverse, muThread = TRUE, justConcatenate = FA
 }
 
 # Dereplicate and merge pairs with dada2:
-dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = TRUE, minOverlap = 5)
+dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5)
 saveRDS(dada2Counts, file = "dada2Counts.rds")
