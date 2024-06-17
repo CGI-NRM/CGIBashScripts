@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 # Load user settings:
-. "$HOME/CGIBashScripts/user_settings.sh"
+if test -f "$HOME/user_settings.sh"
+then
+  . "$HOME/user_settings.sh"
+else
+  . "$HOME/CGIBashScripts/user_settings.sh"
+fi
 
 # Functions:
 
