@@ -83,7 +83,7 @@ mkblast () # create a job script for blastng a fasta file
 mkdownload () # create a job script for running dada2
 {
   # download aws download script:
-  wget -O awsdownload_script.sh https://raw.githubusercontent.com/Naturhistoriska/eDNA/main/Scripts/AWSdownload/awsdownload_script.sh?token=GHSAT0AAAAAACPFHLZLOSK5BCNFUAOD34IAZSFJWAQ
+  cp ~/CGIBashScripts/subscripts/awsdownload_script.sh .
   touch input.txt # create empty input file
   cur_dir=`pwd`
   slurm_script="download_job.sh"
