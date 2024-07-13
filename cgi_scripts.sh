@@ -55,11 +55,11 @@ mkblast () # create a job script for blastng a fasta file
   if test -f "$1"
   then
     fasta_file=$1
-    out_file=${1/.fa/.out}
+    out_file=${1/".fa"/""}".out"
     cur_dir=`pwd`
-    job_name=${1/.fa/_blast}
-    slurm_script=${1/.fa/_blast_script.sh}
-    slurm_script=${slurm_script/y_/}
+    job_name=${1/".fa"/""}"_blast"
+    slurm_script=${1/".fa"/""}"_blast_script.sh"
+    slurm_script=${slurm_script/"y_"/""}
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
     echo "#SBATCH -p core" >> $slurm_script
