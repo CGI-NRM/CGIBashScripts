@@ -27,6 +27,17 @@ roller () # loop a function and redraw the output
   done
 }
 
+pmocver ()
+{
+  stdin=$(cat -)
+  if [ ${#stdin} -gt 0 ]
+  then
+    python3 ~/CGIBashScripts/subscripts/pmocver.py $stdin
+  else
+    python3 ~/CGIBashScripts/subscripts/pmocver.py $1
+  fi
+}
+
 ## HPC:
 rjb () # print information about pending and running jobs
 {
