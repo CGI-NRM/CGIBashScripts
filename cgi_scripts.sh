@@ -27,7 +27,7 @@ roller () # loop a function and redraw the output
   done
 }
 
-pmocver ()
+pmocver () # reverse complement a sequence
 {
   stdin=$(cat -)
   if [ ${#stdin} -gt 0 ]
