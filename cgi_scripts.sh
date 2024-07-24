@@ -29,9 +29,9 @@ roller () # loop a function and redraw the output
 
 pmocver () # reverse complement a sequence
 {
-  stdin=$(cat -)
-  if [ ${#stdin} -gt 0 ]
+  if [ $1 == "-" ]
   then
+    stdin=$(cat -)
     python3 ~/CGIBashScripts/subscripts/pmocver.py $stdin
   else
     python3 ~/CGIBashScripts/subscripts/pmocver.py $1
