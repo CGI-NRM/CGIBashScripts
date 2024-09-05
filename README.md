@@ -1,6 +1,13 @@
 # CGIBashScripts
 A repository for storing bash scripts of common use at CGI.
 
+# Dependencies
+These repos need to be cloned down in the following way in order for all scripts to work:
+```bash
+cd ~/
+git clone https://github.com/tavinus/cloudsend.sh
+```
+
 # Usage
 In the terminal:
 ```bash
