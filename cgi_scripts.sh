@@ -8,6 +8,10 @@ else
   . "$HOME/CGIBashScripts/user_settings.sh"
 fi
 
+# Aliases:
+alias unnotate="bash ~/CGIBashScripts/subscripts/unnotate.sh" # access universal notes
+alias lonotate="bash ~/CGIBashScripts/subscripts/unnotate.sh notes.txt" # create/access notes file at present location
+
 # Functions:
 
 ## General:
