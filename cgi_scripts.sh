@@ -217,3 +217,10 @@ awsout () # check status of aws downloading job
 {
   outslurm | grep remaining | tail -1
 }
+
+# Dardel:
+
+drjb ()
+{
+  squeue --user $hpc_user
+}
