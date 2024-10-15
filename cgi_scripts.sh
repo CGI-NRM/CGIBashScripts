@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
 # Load user settings:
-if test -f "$HOME/user_settings.sh"
+if test -f "$HOME/.cgi_user_settings.sh"
 then
-  . "$HOME/user_settings.sh"
+  . "$HOME/.cgi_user_settings.sh"
 else
-  . "$HOME/CGIBashScripts/user_settings.sh"
+  . "$HOME/CGIBashScripts/.cgi_user_settings.sh"
+fi
+
+# Logic:
+if [ $hpc_cluster == "uppmax" ]
+then
+  jobtype="core"
+elif [ $hpc_cluster == "dardel" ]
+then
+  jobtype="main"
 fi
 
 # Aliases:
@@ -43,7 +52,17 @@ pmocver () # reverse complement a sequence
 }
 
 ## HPC:
-rjb () # print information about pending and running jobs
+
+### Dardel:
+
+dardel_rjb ()
+{
+  squeue --user $hpc_user
+}
+
+### Uppmax:
+
+uppmax_rjb ()
 {
   echo -e "\e[4mRunning:\e[0m\e[32m";
   jobinfo -u $hpc_user | grep " R " | awk '{print $1 "\t\t" $6 "\t" $8 "\t" $11 "\t" $3} END {if(NR==0) print "No jobs currently running"}';
@@ -51,6 +70,19 @@ rjb () # print information about pending and running jobs
   echo -e "\e[4mPending:\e[0m\e[33m";
   jobinfo -u $hpc_user | grep " PD " | awk '{print $1 "\t" $2 "\t" $7 "\t" $9 "\t\t" $10 "\t" $4} END {if(NR==0) print "No jobs currently pending"}';
   echo -e "\e[0m"
+}
+
+### Common:
+
+rjb () # print information about pending and running jobs
+{
+  if [ $hpc_cluster == "uppmax" ]
+  then
+    uppmax_rjb
+  elif [ $hpc_cluster == "dardel" ]
+  then
+    dardel_rjb
+  fi
 }
 
 outslurm () # print latest or specified slurm output file in a directory
@@ -77,7 +109,7 @@ mkblast () # create a job script for blastng a fasta file
     slurm_script=${slurm_script/"y_"/""}
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
-    echo "#SBATCH -p core" >> $slurm_script
+    echo "#SBATCH -p $jobtype" >> $slurm_script
     echo "#SBATCH -n 20" >> $slurm_script
     echo "#SBATCH -t 6:00:00" >> $slurm_script
     echo "#SBATCH -J $job_name" >> $slurm_script
@@ -104,7 +136,7 @@ mkdownload () # create a job script for running dada2
   slurm_script="download_job.sh"
   echo "#! /bin/bash -l" > $slurm_script
   echo "#SBATCH -A $hpc_project" >> $slurm_script
-  echo "#SBATCH -p core" >> $slurm_script
+  echo "#SBATCH -p $jobtype" >> $slurm_script
   echo "#SBATCH -n 10" >> $slurm_script
   echo "#SBATCH -t 10:00:00" >> $slurm_script
   echo "#SBATCH -J aws_download" >> $slurm_script
@@ -129,7 +161,7 @@ mkupload () # create a job script for uploading data
     slurm_script="upload_job.sh"
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
-    echo "#SBATCH -p core" >> $slurm_script
+    echo "#SBATCH -p $jobtype" >> $slurm_script
     echo "#SBATCH -n 10" >> $slurm_script
     echo "#SBATCH -t 10:00:00" >> $slurm_script
     echo "#SBATCH -J nrm_upload" >> $slurm_script
@@ -155,7 +187,7 @@ mkdada2 () # create a job script for running dada2
   slurm_script="dada2_job.sh"
   echo "#! /bin/bash -l" > $slurm_script
   echo "#SBATCH -A $hpc_project" >> $slurm_script
-  echo "#SBATCH -p node" >> $slurm_script
+  echo "#SBATCH -p $jobtype" >> $slurm_script
   echo "#SBATCH -n 1" >> $slurm_script
   echo "#SBATCH -C mem256GB " >> $slurm_script # this makes it a fat node
   echo "#SBATCH -t 2-00:00:00" >> $slurm_script
@@ -182,7 +214,7 @@ mktar () # create a job script for tar-ing a folder
     slurm_script="tar_script.sh"
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
-    echo "#SBATCH -p core" >> $slurm_script
+    echo "#SBATCH -p $jobtype" >> $slurm_script
     echo "#SBATCH -n 20" >> $slurm_script
     echo "#SBATCH -t 6:00:00" >> $slurm_script
     echo "#SBATCH -J tar_folder" >> $slurm_script
@@ -216,11 +248,4 @@ lcratch () # list scratch discs of all running projects
 awsout () # check status of aws downloading job
 {
   outslurm | grep remaining | tail -1
-}
-
-# Dardel:
-
-drjb ()
-{
-  squeue --user $hpc_user
 }
