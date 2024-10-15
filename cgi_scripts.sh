@@ -74,6 +74,17 @@ uppmax_rjb ()
 
 ### Common:
 
+slurm_cheat ()
+{
+  echo "sbatch <filename>"
+  echo "scancel <jobid>"
+  echo "squeue -u <username>"
+  echo "scontrol show job <jobid>"
+  echo "sstat --jobs=your_job-id --format=JobID,aveCPU,MaxRRS,NTasks"
+  echo "sacct --user=<username>" --starttime=YYYY-MM-DD
+  echo "sinfo"
+}
+
 rjb () # print information about pending and running jobs
 {
   if [ $hpc_cluster == "uppmax" ]
