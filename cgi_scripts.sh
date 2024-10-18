@@ -51,6 +51,11 @@ pmocver () # reverse complement a sequence
   fi
 }
 
+zdiff () # check diff between two zipped files
+{
+  diff <(zcat $1) <(zcat $2)
+} 
+
 ## HPC:
 
 ### Dardel:
