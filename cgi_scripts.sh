@@ -54,7 +54,12 @@ pmocver () # reverse complement a sequence
 zdiff () # check diff between two zipped files
 {
   diff <(zcat $1) <(zcat $2)
-} 
+}
+
+zhead () # print first 20 lines of a zipped file
+{
+  zcat $1 | head -n 20
+}
 
 ## HPC:
 
