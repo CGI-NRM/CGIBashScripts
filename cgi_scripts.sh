@@ -24,6 +24,24 @@ alias lonotate="bash ~/CGIBashScripts/subscripts/unnotate.sh notes.txt" # create
 # Functions:
 
 ## General:
+cgi_help ()
+{
+  echo "# Information about CGIBashScripts functions #"
+  echo ""
+  echo "### General ###"
+  echo "nrmupload : upload file to preset nrmcloud folder"
+  echo "roller : loop a function"
+  echo "pmocver : reverse-complement a string"
+  echo "zdiff : run diff on two zipped files"
+  echo "zhead : display the first 20 lines of a zipped file"
+  echo ""
+  echo "### HPC Specific ###"
+  echo "slurm_cheat : display helpful slurm-function"
+  echo "rjb : display running jobs"
+  echo "outslurm : cat the most recent slurm out in current dir"
+  echo "interact : start an interactive job"
+}
+
 nrmupload () # upload one file
 {
   bash ~/cloudsend.sh/cloudsend.sh "$1" "$upload_link"
