@@ -85,7 +85,7 @@ zhead () # print first 20 lines of a zipped file
 
 dardel_rjb ()
 {
-  squeue --user $hpc_user
+  squeue --long --user $hpc_user
 }
 
 ### Uppmax:
