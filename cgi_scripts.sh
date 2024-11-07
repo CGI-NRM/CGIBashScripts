@@ -111,6 +111,7 @@ slurm_cheat ()
   echo "sstat --jobs=your_job-id --format=JobID,aveCPU,MaxRRS,NTasks"
   echo "sacct --user=<username>" --starttime=YYYY-MM-DD
   echo "sinfo"
+  echo "sprio --user=<username>"
 }
 
 rjb () # print information about pending and running jobs
