@@ -84,9 +84,27 @@ zhead () # print first 20 lines of a zipped file
 
 ### Dardel:
 
-dardel_rjb ()
-{
-  squeue --long --user $hpc_user
+dardel_pending () { # helper function to format pending jobs for dardel_rjb
+  while read pending
+  do
+    job_id=`echo $pending | awk '{print $1}'`
+    position=`sprio -S '-Y' | grep --line-number " $job_id " | cut -d: -f1` # figure out place in queue
+    position=$(( position - 1 )) # do not count header
+    time_limit=`echo $pending | awk '{print $7}'`
+    priority=`sprio -S '-Y' | grep " $job_id " | awk '{print $3}'`
+    job_name=`echo $pending | awk '{print $3}'`
+    echo $job_id" "$position" PENDING "$time_limit" "$priority" "$job_name
+    # id pos status time priority name
+  done < <(squeue --long --user $hpc_user | grep "PENDING") # for all pending jobs
+}
+
+dardel_rjb () {   
+  echo -e "\e[4mRunning:\e[0m\e[32m";   
+  squeue --long --user $hpc_user | grep "RUNNING" | awk '{print} END {if(NR==0) print "No jobs currently running"}';   
+  echo -e "\e[0m";   
+  echo -e "\e[4mPending:\e[0m\e[33m";   
+  dardel_pending # format and figure out pending jobs
+  echo -e "\e[0m" 
 }
 
 ### Uppmax:
