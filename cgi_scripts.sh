@@ -219,7 +219,7 @@ mkdownload () # create a job script for running dada2
   echo "#! /bin/bash -l" > $slurm_script
   echo "#SBATCH -A $hpc_project" >> $slurm_script
   echo "#SBATCH -p $jobtype" >> $slurm_script
-  echo "#SBATCH -n 10" >> $slurm_script
+  echo "#SBATCH -n 1" >> $slurm_script
   echo "#SBATCH -t 10:00:00" >> $slurm_script
   echo "#SBATCH -J aws_download" >> $slurm_script
   echo "" >> $slurm_script
@@ -244,7 +244,7 @@ mkupload () # create a job script for uploading data
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
     echo "#SBATCH -p $jobtype" >> $slurm_script
-    echo "#SBATCH -n 10" >> $slurm_script
+    echo "#SBATCH -n 1" >> $slurm_script
     echo "#SBATCH -t 10:00:00" >> $slurm_script
     echo "#SBATCH -J nrm_upload" >> $slurm_script
     echo "" >> $slurm_script
@@ -297,7 +297,7 @@ mktar () # create a job script for tar-ing a folder
     echo "#! /bin/bash -l" > $slurm_script
     echo "#SBATCH -A $hpc_project" >> $slurm_script
     echo "#SBATCH -p $jobtype" >> $slurm_script
-    echo "#SBATCH -n 20" >> $slurm_script
+    echo "#SBATCH -n 1" >> $slurm_script
     echo "#SBATCH -t 6:00:00" >> $slurm_script
     echo "#SBATCH -J tar_folder" >> $slurm_script
     echo "" >> $slurm_script
