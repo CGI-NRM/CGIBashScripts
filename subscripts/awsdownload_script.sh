@@ -21,7 +21,7 @@ echo "aws_secret_access_key = "${awsinfo[2]} >> $credentials_file
 aws s3 cp s3://${awsinfo[0]} . --recursive
 
 # Get location of the md5 sums reported by BMK
-md5file=$(find . -iname '*md5*' -type f)
+md5file=$(find . -iname '*md5.txt*' -type f)
 
 datapath=$(dirname $md5file)
 # Check md5sums:
