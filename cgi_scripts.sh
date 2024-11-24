@@ -291,7 +291,7 @@ mktar () # create a job script for tar-ing a folder
   if test -d "$1"
   then
     folder_input=$1
-    folder_output=${1/\//.tar}
+    folder_output=${1/\//""}".tar"
     cur_dir=`pwd`
     slurm_script="tar_script.sh"
     echo "#! /bin/bash -l" > $slurm_script
