@@ -239,6 +239,7 @@ mkupload () # create a job script for uploading data
   if [ -d "$1" ]
   then
     target_folder=$1
+    folder_output=${1/\//""}".tar"
     cur_dir=`pwd`
     slurm_script="upload_job.sh"
     echo "#! /bin/bash -l" > $slurm_script
@@ -251,11 +252,11 @@ mkupload () # create a job script for uploading data
     echo "# go to this directory:" >> $slurm_script
     echo "cd $cur_dir" >> $slurm_script
     echo "" >> $slurm_script
-    echo "# upload everything three levels down in the folder:" >> $slurm_script
-    echo "for file in $target_folder/*/*/*/*" >> $slurm_script
-    echo "do" >> $slurm_script
-    echo "bash ~/cloudsend.sh/cloudsend.sh \"\$file\" \"$upload_link\"" >> $slurm_script
-    echo "done" >> $slurm_script
+    echo "# tar folder:" >> $slurm_script
+    echo "tar -cvf $folder_output ./$folder_input" >> $slurm_script
+    echo "" >> $slurm_script
+    echo "# upload tar file:" >> $slurm_script
+    echo "bash ~/cloudsend.sh/cloudsend.sh \"\$folder_output\" \"$upload_link\"" >> $slurm_script
   else
     echo "directory $1 does not exist."
   fi
