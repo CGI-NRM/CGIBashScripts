@@ -253,10 +253,14 @@ mkupload () # create a job script for uploading data
     echo "cd $cur_dir" >> $slurm_script
     echo "" >> $slurm_script
     echo "# tar folder:" >> $slurm_script
+    echo "echo \"Tar-ing folder.\"" >> $slurm_script
     echo "tar -cvf $folder_output ./$folder_input" >> $slurm_script
+    echo "echo \"- done\"" >> $slurm_script
     echo "" >> $slurm_script
     echo "# upload tar file:" >> $slurm_script
+    echo "echo \"Uploading tar-file.\"" >> $slurm_script
     echo "bash ~/cloudsend.sh/cloudsend.sh \"$folder_output\" \"$upload_link\"" >> $slurm_script
+    echo "echo \"- done\"" >> $slurm_script
   else
     echo "directory $1 does not exist."
   fi
