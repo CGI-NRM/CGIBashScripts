@@ -21,6 +21,7 @@ fi
 alias vim="vim-nox11" # stops .vimrc bug
 alias unnotate="bash ~/CGIBashScripts/subscripts/unnotate.sh" # access universal notes
 alias lonotate="bash ~/CGIBashScripts/subscripts/unnotate.sh notes.txt" # create/access notes file at present location
+alias todowork="bash ~/CGIBashScripts/subscripts/unnotate.sh ~/.todo_list.txt" # access work todo list
 
 # Functions:
 
