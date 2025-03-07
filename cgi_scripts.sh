@@ -22,6 +22,7 @@ fi
 alias unnotate="bash ~/CGIBashScripts/subscripts/unnotate.sh" # access universal notes
 alias lonotate="bash ~/CGIBashScripts/subscripts/unnotate.sh notes.txt" # create/access notes file at present location
 alias todowork="bash ~/CGIBashScripts/subscripts/unnotate.sh ~/.todo_list.txt" # access work todo list
+alias projinfoCompute="projinfo | grep -A 5 'Information for compute project:'" # print only available compute projects
 
 # Functions:
 
