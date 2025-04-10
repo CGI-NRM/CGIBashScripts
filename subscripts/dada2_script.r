@@ -53,6 +53,6 @@ DadaAnalysis <- function(forward, reverse, muThread = TRUE,  justConcatenate = F
   return(seqtabNochim)
 }
 
-dada2Counts <- MetaBAnalysis::DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5, paired = TRUE)
+dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5, paired = TRUE)
 saveRDS(dada2Counts, file = "dada2Counts.rds")
 
