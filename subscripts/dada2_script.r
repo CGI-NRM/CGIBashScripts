@@ -1,4 +1,23 @@
-library(dada2)
+# For dardel:
+if("BiocManager" %in% installed.packages()) {
+  library(BiocManager)
+} else {
+  install.packages("BiocManager")
+  library(BiocManager)
+}
+if("data2" %in% installed.packages()) {
+  library(dada2)
+} else {
+  BiocManager::install("dada2")
+  library(dada2)
+}
+if("edgeR" %in% installed.packages()) {
+  library(edgeR)
+} else {
+  install.packages("edgeR")
+  library(edgeR)
+}
+
 library(edgeR)
 
 CollectData <- function(directory = "./Filtered_data") {
