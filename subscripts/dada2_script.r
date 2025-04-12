@@ -18,8 +18,6 @@ if("edgeR" %in% installed.packages()) {
   library(edgeR)
 }
 
-library(edgeR)
-
 CollectData <- function(directory = "./Filtered_data") {
   forward <- list.files(directory, pattern = "_1.fastq.gz", full.names = TRUE)
   reverse <- list.files(directory, pattern = "_2.fastq.gz", full.names = TRUE)
