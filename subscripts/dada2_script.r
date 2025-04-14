@@ -5,7 +5,7 @@ if("BiocManager" %in% installed.packages()) {
   install.packages("BiocManager")
   library(BiocManager)
 }
-if("data2" %in% installed.packages()) {
+if("dada2" %in% installed.packages()) {
   library(dada2)
 } else {
   library(dada2)
