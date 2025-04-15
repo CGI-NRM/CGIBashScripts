@@ -278,16 +278,16 @@ mkdada2 () # create a job script for running dada2
   echo "#SBATCH -A $hpc_project" >> $slurm_script
   echo "#SBATCH -p $jobtype" >> $slurm_script
   echo "#SBATCH -n 1" >> $slurm_script
-  echo "#SBATCH -C mem256GB " >> $slurm_script # this makes it a fat node
-  echo "#SBATCH -t 2-00:00:00" >> $slurm_script
-  echo "#SBATCH -J dada2_fat" >> $slurm_script
+#  echo "#SBATCH -C mem256GB " >> $slurm_script # this makes it a fat node, does not work on dardel - fix?
+  echo "#SBATCH -t 1-00:00:00" >> $slurm_script
+  echo "#SBATCH -J dada2_hpc" >> $slurm_script
   echo "" >> $slurm_script
   echo "# go to this directory:" >> $slurm_script
   echo "cd $cur_dir" >> $slurm_script
   echo "" >> $slurm_script
   echo "# load software modules:" >> $slurm_script
-  echo "module load bioinfo-tools" >> $slurm_script
-  echo "module load R_packages" >> $slurm_script
+  echo "module load PDC" >> $slurm_script
+  echo "module load R" >> $slurm_script
   echo "" >> $slurm_script
   echo "# run dada2 script:" >> $slurm_script
   echo "Rscript ./dada2_script.r" >> $slurm_script
