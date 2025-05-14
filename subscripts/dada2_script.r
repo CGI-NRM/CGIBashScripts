@@ -1,5 +1,22 @@
-library(dada2)
-library(edgeR)
+# For dardel:
+if("BiocManager" %in% installed.packages()) {
+  library(BiocManager)
+} else {
+  install.packages("BiocManager")
+  library(BiocManager)
+}
+if("data2" %in% installed.packages()) {
+  library(dada2)
+} else {
+  BiocManager::install("dada2")
+  library(dada2)
+}
+if("edgeR" %in% installed.packages()) {
+  library(edgeR)
+} else {
+  install.packages("edgeR")
+  library(edgeR)
+}
 
 CollectData <- function(directory = "./Filtered_data") {
   forward <- list.files(directory, pattern = "_1.fastq.gz", full.names = TRUE)
