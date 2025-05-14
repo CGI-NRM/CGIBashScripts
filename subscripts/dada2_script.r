@@ -5,16 +5,15 @@ if("BiocManager" %in% installed.packages()) {
   install.packages("BiocManager")
   library(BiocManager)
 }
-if("data2" %in% installed.packages()) {
+if("dada2" %in% installed.packages()) {
   library(dada2)
 } else {
-  BiocManager::install("dada2")
   library(dada2)
 }
 if("edgeR" %in% installed.packages()) {
   library(edgeR)
 } else {
-  install.packages("edgeR")
+  BiocManager::install("edgeR")
   library(edgeR)
 }
 
