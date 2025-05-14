@@ -29,19 +29,30 @@ out <- dada2::filterAndTrim(primer1$Forward, primer1$FiltFs,
 			    compress=TRUE, multithread=TRUE)
 saveRDS(out, file = "out.rds")
 
-DadaAnalysis <- function(forward, reverse, muThread = TRUE, justConcatenate = FALSE, minOverlap = 5) {
+# Dereplicate and merge pairs with dada2:
+DadaAnalysis <- function(forward, reverse, muThread = TRUE,  justConcatenate = FALSE, minOverlap = 5,  paired = TRUE) {
   errF <- dada2::learnErrors(forward, multithread = muThread)
-  errR <- dada2::learnErrors(reverse, multithread = muThread)
   derepsF <- dada2::derepFastq(forward)
-  derepsR <- dada2::derepFastq(reverse)
   dadaF <- dada2::dada(derepsF, err = errF, multithread = muThread)
-  dadaR <- dada2::dada(derepsR, err = errR, multithread = muThread)
-  mergers <- dada2::mergePairs(dadaF, derepsF, dadaR, derepsR, verbose = TRUE, justConcatenate = justConcatenate, minOverlap = minOverlap)
-  seqTab <- dada2::makeSequenceTable(mergers)
-  seqtabNochim <- dada2::removeBimeraDenovo(seqTab, method = "consensus", multithread = muThread, verbose = TRUE)
+  if(paired == TRUE) {
+    errR <- dada2::learnErrors(reverse, multithread = muThread)
+    derepsR <- dada2::derepFastq(reverse)
+    dadaR <- dada2::dada(derepsR, err = errR, multithread = muThread)
+    mergers <- dada2::mergePairs(dadaF, derepsF, dadaR,
+				 derepsR, verbose = TRUE,
+				 justConcatenate = justConcatenate,
+				 minOverlap = minOverlap)
+    seqTab <- dada2::makeSequenceTable(mergers)
+  } else {
+    seqTab <- dada2::makeSequenceTable(dadaF)
+  }
+  seqtabNochim <- dada2::removeBimeraDenovo(seqTab,
+					    method = "consensus",
+					    multithread = muThread,
+					    verbose = TRUE)
   return(seqtabNochim)
 }
 
-# Dereplicate and merge pairs with dada2:
-dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5)
+dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5, paired = TRUE)
 saveRDS(dada2Counts, file = "dada2Counts.rds")
+
