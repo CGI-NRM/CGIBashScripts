@@ -1,4 +1,5 @@
 # For dardel:
+chooseCRANmirror(ind = 1) # select first CRAN mirror
 if("BiocManager" %in% installed.packages()) {
   library(BiocManager)
 } else {
@@ -37,6 +38,7 @@ CollectData <- function(directory = "./Filtered_data") {
 
 # Collect sample paths and names. Duplicate line once per primer:
 primer1 <- CollectData("./Filtered_data")
+saveRDS(primer1, file = "primer1.rds")
 
 # Filter reads and generate out object for later use:
 out <- dada2::filterAndTrim(primer1$Forward, primer1$FiltFs,
