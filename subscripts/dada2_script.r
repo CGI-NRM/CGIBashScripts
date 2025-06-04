@@ -9,6 +9,7 @@ if("BiocManager" %in% installed.packages()) {
 if("dada2" %in% installed.packages()) {
   library(dada2)
 } else {
+  BiocManager::install("dada2")
   library(dada2)
 }
 if("edgeR" %in% installed.packages()) {
