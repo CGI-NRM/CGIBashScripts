@@ -19,41 +19,39 @@ if("edgeR" %in% installed.packages()) {
   library(edgeR)
 }
 
-CollectData <- function(directory = "./Filtered_data") {
+# Functions:
+CollectData <- function(directory = "../Filtered_data", prefix = "") {
   forward <- list.files(directory, pattern = "_1.fastq.gz", full.names = TRUE)
   reverse <- list.files(directory, pattern = "_2.fastq.gz", full.names = TRUE)
   forwardC <- list.files(directory, pattern = "_1.fastq.gz", full.names = FALSE)
   reverseC <- list.files(directory, pattern = "_2.fastq.gz", full.names = FALSE)
+  forward <- forward[grepl(prefix, forward)]
+  reverse <- reverse[grepl(prefix, reverse)]
+  forwardC <- forwardC[grepl(prefix, forwardC)]
+  reverseC <- reverseC[grepl(prefix, reverseC)]
   filtFs <- file.path(directory, "filtered", forwardC)
   filtRs <- file.path(directory, "filtered", reverseC)
   allSamples <- unique(gsub("_outFwd_1.fastq.gz|_outRev_1.fastq.gz", "", forwardC))
-  output <- list(Forward = forward,
-		 Reverse = reverse,
-		 ForwardC = forwardC,
-		 ReverseC = reverseC,
-		 FiltFs = filtFs,
-		 FiltRs = filtRs,
-		 Samples = allSamples)
+  output <- list(Forward = forward, Reverse = reverse, ForwardC = forwardC, ReverseC = reverseC, FiltFs = filtFs, FiltRs = filtRs, Samples = allSamples, Prefix = prefix)
   return(output)
+} 
+
+FiltTrimWrap <- function(primerData) {
+  if (length(primerData$Reverse) > 0) { # if paired-ended
+    out <- dada2::filterAndTrim(primerData$Forward, primerData$FiltFs, primerData$Reverse, primerData$FiltRs, maxN=0, truncQ=2, rm.phix=TRUE, compress=TRUE, multithread=TRUE)
+  } else {
+    out <- dada2::filterAndTrim(primerData$Forward, primerData$FiltFs, maxN=0, truncQ=2, rm.phix=TRUE, compress=TRUE, multithread=TRUE)
+  }
+  return(out)
 }
 
-# Collect sample paths and names. Duplicate line once per primer:
-primer1 <- CollectData("./Filtered_data")
-saveRDS(primer1, file = "primer1.rds")
-
-# Filter reads and generate out object for later use:
-out <- dada2::filterAndTrim(primer1$Forward, primer1$FiltFs,
-			    primer1$Reverse, primer1$FiltRs,
-			    maxN=0, truncQ=2, rm.phix=TRUE,
-			    compress=TRUE, multithread=TRUE)
-saveRDS(out, file = "out.rds")
-
-# Dereplicate and merge pairs with dada2:
-DadaAnalysis <- function(forward, reverse, muThread = TRUE,  justConcatenate = FALSE, minOverlap = 5,  paired = TRUE) {
+DadaAnalysis <- function(primerData, muThread = TRUE, justConcatenate = FALSE, minOverlap = 5) {
+  forward <- primerData$FiltFs
+  reverse <- primerData$FiltRs
   errF <- dada2::learnErrors(forward, multithread = muThread)
   derepsF <- dada2::derepFastq(forward)
   dadaF <- dada2::dada(derepsF, err = errF, multithread = muThread)
-  if(paired == TRUE) {
+  if (length(reverse) > 0) { # if there are paired ends
     errR <- dada2::learnErrors(reverse, multithread = muThread)
     derepsR <- dada2::derepFastq(reverse)
     dadaR <- dada2::dada(derepsR, err = errR, multithread = muThread)
@@ -72,6 +70,21 @@ DadaAnalysis <- function(forward, reverse, muThread = TRUE,  justConcatenate = F
   return(seqtabNochim)
 }
 
-dada2Counts <- DadaAnalysis(primer1$FiltFs, primer1$FiltRs, justConcatenate = FALSE, minOverlap = 5, paired = TRUE)
+# Collect sample paths and names. Duplicate line once per primer:
+primer1 <- CollectData("./Filtered_data", prefix = "mifish")
+saveRDS(primer1, file = "primer1.rds")
+#primer2 <- CollectData("./Filtered_data", prefix = "v16s")
+#saveRDS(primer2, file = "primer2.rds")
+
+# Filter reads and generate out object for later use:
+out <- FiltTrimWrap(primer1)
+saveRDS(out, file = "out.rds")
+#out2 <- FiltTrimWrap(primer2)
+#saveRDS(out2, file = "out2.rds")
+
+# Dereplicate and merge pairs with dada2:
+dada2Counts <- DadaAnalysis(primer1, justConcatenate = FALSE, minOverlap = 5)
 saveRDS(dada2Counts, file = "dada2Counts.rds")
+#dada2Counts2 <- DadaAnalysis(primer2, justConcatenate = FALSE, minOverlap = 5)
+#saveRDS(dada2Counts2, file = "dada2Counts2.rds")
 
