@@ -18,6 +18,12 @@ if("edgeR" %in% installed.packages()) {
   BiocManager::install("edgeR")
   library(edgeR)
 }
+if("Biostrings" %in% installed.packages()) {
+  library(Biostrings)
+} else {
+  BiocManager::install("Biostrings")
+  library(Biostrings)
+}
 
 # Functions:
 CollectData <- function(directory = "../Filtered_data", prefix = "") {
@@ -70,6 +76,42 @@ DadaAnalysis <- function(primerData, muThread = TRUE, justConcatenate = FALSE, m
   return(seqtabNochim)
 }
 
+DFCombine <- function(dataset, samples) {
+  counter <- 0
+  for(i in samples) {
+    if (counter == 0) {
+      output <- data.frame(S2 = rowSums(dataset[, grepl(x = names(dataset), pattern = i)]))
+      counter <- counter + 1
+      names(output)[names(output) == "S2"] <- i
+      next
+  }
+    output <- cbind(output, S2 = rowSums(dataset[, grepl(x = names(dataset), pattern = i)]))
+    names(output)[names(output) == "S2"] <- i   }
+  return(output)
+}
+
+MakeDGEList <- function(dataset, primerData) {
+  samples <- primerData$Samples
+  forwardSamples <- primerData$ForwardC
+  datasetDF <- as.data.frame(t(dataset))
+  if (any(grepl("outRev", forwardSamples))) {
+    dfAll <- DFCombine(datasetDF, samples)
+    yAll <- edgeR::DGEList(dfAll)
+  }   else {
+    yAll <- edgeR::DGEList(datasetDF)
+  }
+  return(yAll)
+}
+
+ExportFasta <- function(countData, fileName, minLength = 50, maxLength = 1000) {
+  seqs <- row.names(countData)
+  names(seqs) <- paste("Seq", 1:length(seqs), sep = "_")
+  seqs <- seqs[nchar(seqs) >= minLength]
+  seqs <- seqs[nchar(seqs) <= maxLength]
+  Biostrings::writeXStringSet(DNAStringSet(seqs, use.names = TRUE), fileName)
+  sprintf("Wrote %s sequences to %s", length(seqs), fileName)
+}
+
 # Collect sample paths and names. Duplicate line once per primer:
 primer1 <- CollectData("./Filtered_data", prefix = "mifish")
 saveRDS(primer1, file = "primer1.rds")
@@ -88,3 +130,12 @@ saveRDS(dada2Counts, file = "dada2Counts.rds")
 #dada2Counts2 <- DadaAnalysis(primer2, justConcatenate = FALSE, minOverlap = 5)
 #saveRDS(dada2Counts2, file = "dada2Counts2.rds")
 
+# Convert and modify matrix "dada2Counts" to DGEList "yAll":
+yAll <- MakeDGEList(dada2Counts, primer1)
+saveRDS(yAll, file = "yAll.rds")
+#yAll2 <- MakeDGEList(dada2Counts2, primer2)
+#saveRDS(yAll2, file = "yAll2.rds")
+
+# Export fasta-file:
+ExportFasta(yAll, paste0("y_", projId, primer1$Prefix, ".fa"), minLength = 30, maxLength = 1000)
+#ExportFasta(yAll2, paste0("y_", projId, primer2$Prefix, ".fa"), minLength = 30, maxLength = 1000)
