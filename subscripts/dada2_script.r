@@ -113,6 +113,7 @@ ExportFasta <- function(countData, fileName, minLength = 50, maxLength = 1000) {
 }
 
 # Collect sample paths and names. Duplicate line once per primer:
+projId <- "XYZ"
 primer1 <- CollectData("./Filtered_data", prefix = "mifish")
 saveRDS(primer1, file = "primer1.rds")
 #primer2 <- CollectData("./Filtered_data", prefix = "v16s")
