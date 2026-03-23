@@ -205,7 +205,7 @@ mkblast () # create a job script for blastng a fasta file
     echo "module load bioinfo-tools blast" >> $slurm_script
     echo "" >> $slurm_script
     echo "# blast sequences:" >> $slurm_script
-    echo "blastn -query ./$fasta_file -db nt -out ./$out_file -outfmt \"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids sscinames scomnames\" -max_target_seqs 5 -num_threads 20" >> $slurm_script
+    echo "blastn -query ./$fasta_file -db nt -out ./$out_file -outfmt \"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids sscinames scomnames qcovs\" -max_target_seqs 5 -num_threads 20" >> $slurm_script
   else
     echo "file $1 does not exist."
   fi
