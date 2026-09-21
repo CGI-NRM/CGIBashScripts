@@ -37,7 +37,7 @@ CollectData <- function(directory = "../Filtered_data", prefix = "") {
   reverseC <- reverseC[grepl(prefix, reverseC)]
   filtFs <- file.path(directory, "filtered", forwardC)
   filtRs <- file.path(directory, "filtered", reverseC)
-  allSamples <- unique(gsub("_outFwd_1.fastq.gz|_outRev_1.fastq.gz", "", forwardC))
+  allSamples <- unique(gsub("_outFwd_1.fastq.gz|_outRev_1.fastq.gz|_outFwd_2.fastq.gz|_outRev_2.fastq.gz", "", forwardC))
   output <- list(Forward = forward, Reverse = reverse, ForwardC = forwardC, ReverseC = reverseC, FiltFs = filtFs, FiltRs = filtRs, Samples = allSamples, Prefix = prefix)
   return(output)
 } 
